@@ -76,8 +76,8 @@ use std::ops::Deref;
 ///
 #[derive(Clone)]
 pub struct Program<'info, T: Id + Clone> {
-    info: AccountInfo<'info>,
-    _phantom: PhantomData<T>,
+    pub info: AccountInfo<'info>,
+    pub _phantom: PhantomData<T>,
 }
 
 impl<'info, T: Id + Clone + fmt::Debug> fmt::Debug for Program<'info, T> {
