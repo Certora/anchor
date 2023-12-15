@@ -229,17 +229,14 @@ pub enum Error {
 impl std::error::Error for Error {}
 
 impl Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Error::AnchorError(ae) => Display::fmt(&ae, f),
-            Error::ProgramError(pe) => Display::fmt(&pe, f),
-        }
+    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Ok(())
     }
 }
 
 impl From<AnchorError> for Error {
     fn from(ae: AnchorError) -> Self {
-        Self::AnchorError(Box::new(ae))
+        Self::AnchorError(ae)
     }
 }
 
@@ -268,54 +265,19 @@ impl Error {
         }
     }
 
-    pub fn with_account_name(mut self, account_name: impl ToString) -> Self {
-        match &mut self {
-            Error::AnchorError(ae) => {
-                ae.error_origin = Some(ErrorOrigin::AccountName(account_name.to_string()));
-            }
-            Error::ProgramError(pe) => {
-                pe.error_origin = Some(ErrorOrigin::AccountName(account_name.to_string()));
-            }
-        };
+    pub fn with_account_name(self, _account_name: impl ToString) -> Self {
         self
     }
 
-    pub fn with_source(mut self, source: Source) -> Self {
-        match &mut self {
-            Error::AnchorError(ae) => {
-                ae.error_origin = Some(ErrorOrigin::Source(source));
-            }
-            Error::ProgramError(pe) => {
-                pe.error_origin = Some(ErrorOrigin::Source(source));
-            }
-        };
+    pub fn with_source(self, _source: Source) -> Self {
         self
     }
 
-    pub fn with_pubkeys(mut self, pubkeys: (Pubkey, Pubkey)) -> Self {
-        let pubkeys = Some(ComparedValues::Pubkeys((pubkeys.0, pubkeys.1)));
-        match &mut self {
-            Error::AnchorError(ae) => ae.compared_values = pubkeys,
-            Error::ProgramError(pe) => pe.compared_values = pubkeys,
-        };
+    pub fn with_pubkeys(self, _pubkeys: (Pubkey, Pubkey)) -> Self {
         self
     }
 
-    pub fn with_values(mut self, values: (impl ToString, impl ToString)) -> Self {
-        match &mut self {
-            Error::AnchorError(ae) => {
-                ae.compared_values = Some(ComparedValues::Values((
-                    values.0.to_string(),
-                    values.1.to_string(),
-                )))
-            }
-            Error::ProgramError(pe) => {
-                pe.compared_values = Some(ComparedValues::Values((
-                    values.0.to_string(),
-                    values.1.to_string(),
-                )))
-            }
-        };
+    pub fn with_values(self, _values: (impl ToString, impl ToString)) -> Self {
         self
     }
 }
@@ -336,65 +298,19 @@ impl PartialEq for ProgramErrorWithOrigin {
 impl Eq for ProgramErrorWithOrigin {}
 
 impl Display for ProgramErrorWithOrigin {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        Display::fmt(&self.program_error, f)
+    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Ok(())
     }
 }
 
 impl ProgramErrorWithOrigin {
-    pub fn log(&self) {
-        match &self.error_origin {
-            None => {
-                anchor_lang::solana_program::msg!(
-                    "ProgramError occurred. Error Code: {:?}. Error Number: {}. Error Message: {}.",
-                    self.program_error,
-                    u64::from(self.program_error.clone()),
-                    self.program_error
-                );
-            }
-            Some(ErrorOrigin::Source(source)) => {
-                anchor_lang::solana_program::msg!(
-                    "ProgramError thrown in {}:{}. Error Code: {:?}. Error Number: {}. Error Message: {}.",
-                    source.filename,
-                    source.line,
-                    self.program_error,
-                    u64::from(self.program_error.clone()),
-                    self.program_error
-                );
-            }
-            Some(ErrorOrigin::AccountName(account_name)) => {
-                // using sol_log because msg! wrongly interprets 5 inputs as u64
-                anchor_lang::solana_program::log::sol_log(&format!(
-                    "ProgramError caused by account: {}. Error Code: {:?}. Error Number: {}. Error Message: {}.",
-                    account_name,
-                    self.program_error,
-                    u64::from(self.program_error.clone()),
-                    self.program_error
-                ));
-            }
-        }
-        match &self.compared_values {
-            Some(ComparedValues::Pubkeys((left, right))) => {
-                anchor_lang::solana_program::msg!("Left:");
-                left.log();
-                anchor_lang::solana_program::msg!("Right:");
-                right.log();
-            }
-            Some(ComparedValues::Values((left, right))) => {
-                anchor_lang::solana_program::msg!("Left: {}", left);
-                anchor_lang::solana_program::msg!("Right: {}", right);
-            }
-            None => (),
-        }
-    }
+    pub fn log(&self) {}
 
-    pub fn with_source(mut self, source: Source) -> Self {
-        self.error_origin = Some(ErrorOrigin::Source(source));
+    pub fn with_source(self, _source: Source) -> Self {
         self
     }
 
-    pub fn with_account_name(mut self, account_name: impl ToString) -> Self {
-        self.error_origin = Some(ErrorOrigin::AccountName(account_name.to_string()));
+    pub fn with_account_name(self, _account_name: impl ToString) -> Self {
         self
     }
 }
@@ -431,63 +347,20 @@ pub struct AnchorError {
 }
 
 impl AnchorError {
-    pub fn log(&self) {
-        match &self.error_origin {
-            None => {
-                anchor_lang::solana_program::log::sol_log(&format!(
-                    "AnchorError occurred. Error Code: {}. Error Number: {}. Error Message: {}.",
-                    self.error_name, self.error_code_number, self.error_msg
-                ));
-            }
-            Some(ErrorOrigin::Source(source)) => {
-                anchor_lang::solana_program::msg!(
-                    "AnchorError thrown in {}:{}. Error Code: {}. Error Number: {}. Error Message: {}.",
-                    source.filename,
-                    source.line,
-                    self.error_name,
-                    self.error_code_number,
-                    self.error_msg
-                );
-            }
-            Some(ErrorOrigin::AccountName(account_name)) => {
-                anchor_lang::solana_program::log::sol_log(&format!(
-                    "AnchorError caused by account: {}. Error Code: {}. Error Number: {}. Error Message: {}.",
-                    account_name,
-                    self.error_name,
-                    self.error_code_number,
-                    self.error_msg
-                ));
-            }
-        }
-        match &self.compared_values {
-            Some(ComparedValues::Pubkeys((left, right))) => {
-                anchor_lang::solana_program::msg!("Left:");
-                left.log();
-                anchor_lang::solana_program::msg!("Right:");
-                right.log();
-            }
-            Some(ComparedValues::Values((left, right))) => {
-                anchor_lang::solana_program::msg!("Left: {}", left);
-                anchor_lang::solana_program::msg!("Right: {}", right);
-            }
-            None => (),
-        }
-    }
+    pub fn log(&self) {}
 
-    pub fn with_source(mut self, source: Source) -> Self {
-        self.error_origin = Some(ErrorOrigin::Source(source));
+    pub fn with_source(self, _source: Source) -> Self {
         self
     }
 
-    pub fn with_account_name(mut self, account_name: impl ToString) -> Self {
-        self.error_origin = Some(ErrorOrigin::AccountName(account_name.to_string()));
+    pub fn with_account_name(self, _account_name: impl ToString) -> Self {
         self
     }
 }
 
 impl Display for AnchorError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        Debug::fmt(&self, f)
+    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Ok(())
     }
 }
 
