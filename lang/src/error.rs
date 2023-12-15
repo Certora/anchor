@@ -222,8 +222,8 @@ pub enum ErrorCode {
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
-    AnchorError(Box<AnchorError>),
-    ProgramError(Box<ProgramErrorWithOrigin>),
+    AnchorError(u64, Box<AnchorError>),
+    ProgramError(u64, Box<ProgramErrorWithOrigin>),
 }
 
 impl std::error::Error for Error {}
@@ -236,32 +236,32 @@ impl Display for Error {
 
 impl From<AnchorError> for Error {
     fn from(ae: AnchorError) -> Self {
-        Self::AnchorError(ae)
+        Self::AnchorError(42, Box::new(ae))
     }
 }
 
 impl From<ProgramError> for Error {
     fn from(program_error: ProgramError) -> Self {
-        Self::ProgramError(Box::new(program_error.into()))
+        Self::ProgramError(43, Box::new(program_error.into()))
     }
 }
 impl From<BorshIoError> for Error {
     fn from(error: BorshIoError) -> Self {
-        Error::ProgramError(Box::new(ProgramError::from(error).into()))
+        Error::ProgramError(43, Box::new(ProgramError::from(error).into()))
     }
 }
 
 impl From<ProgramErrorWithOrigin> for Error {
     fn from(pe: ProgramErrorWithOrigin) -> Self {
-        Self::ProgramError(Box::new(pe))
+        Self::ProgramError(43, Box::new(pe))
     }
 }
 
 impl Error {
     pub fn log(&self) {
         match self {
-            Error::ProgramError(program_error) => program_error.log(),
-            Error::AnchorError(anchor_error) => anchor_error.log(),
+            Error::ProgramError(_, program_error) => program_error.log(),
+            Error::AnchorError(_, anchor_error) => anchor_error.log(),
         }
     }
 
@@ -376,12 +376,12 @@ impl Eq for AnchorError {}
 impl std::convert::From<Error> for anchor_lang::solana_program::program_error::ProgramError {
     fn from(e: Error) -> anchor_lang::solana_program::program_error::ProgramError {
         match e {
-            Error::AnchorError(error) => {
+            Error::AnchorError(_, error) => {
                 anchor_lang::solana_program::program_error::ProgramError::Custom(
                     error.error_code_number,
                 )
             }
-            Error::ProgramError(program_error) => program_error.program_error,
+            Error::ProgramError(_, program_error) => program_error.program_error,
         }
     }
 }
