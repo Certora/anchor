@@ -277,7 +277,7 @@ pub enum ErrorCode {
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
     AnchorError(AnchorError),
-    ProgramError(Box<ProgramErrorWithOrigin>),
+    ProgramError(ProgramErrorWithOrigin),
 }
 
 impl std::error::Error for Error {}
@@ -296,18 +296,18 @@ impl From<AnchorError> for Error {
 
 impl From<ProgramError> for Error {
     fn from(program_error: ProgramError) -> Self {
-        Self::ProgramError(Box::new(program_error.into()))
+        Self::ProgramError(program_error.into())
     }
 }
 impl From<BorshIoError> for Error {
     fn from(error: BorshIoError) -> Self {
-        Error::ProgramError(Box::new(ProgramError::from(error).into()))
+        Error::ProgramError(ProgramError::from(error).into())
     }
 }
 
 impl From<ProgramErrorWithOrigin> for Error {
     fn from(pe: ProgramErrorWithOrigin) -> Self {
-        Self::ProgramError(Box::new(pe))
+        Self::ProgramError(pe)
     }
 }
 
