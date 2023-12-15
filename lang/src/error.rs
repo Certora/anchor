@@ -222,7 +222,7 @@ pub enum ErrorCode {
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
-    AnchorError(Box<AnchorError>),
+    AnchorError(AnchorError),
     ProgramError(Box<ProgramErrorWithOrigin>),
 }
 
