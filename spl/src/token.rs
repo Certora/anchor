@@ -444,7 +444,7 @@ pub struct SyncNative<'info> {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Copy)]
-pub struct TokenAccount(spl_token::state::Account);
+pub struct TokenAccount(pub spl_token::state::Account);
 
 impl TokenAccount {
     pub const LEN: usize = spl_token::state::Account::LEN;
@@ -475,7 +475,7 @@ impl Deref for TokenAccount {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Copy)]
-pub struct Mint(spl_token::state::Mint);
+pub struct Mint(pub spl_token::state::Mint);
 
 impl Mint {
     pub const LEN: usize = spl_token::state::Mint::LEN;
