@@ -540,13 +540,12 @@ macro_rules! require {
 macro_rules! require_eq {
     ($value1: expr, $value2: expr, $error_code:expr $(,)?) => {
         if $value1 != $value2 {
-            return Err(error!($error_code).with_values(($value1, $value2)));
+	    panic!();
         }
     };
     ($value1: expr, $value2: expr $(,)?) => {
         if $value1 != $value2 {
-            return Err(error!(anchor_lang::error::ErrorCode::RequireEqViolated)
-                .with_values(($value1, $value2)));
+	    panic!(); 
         }
     };
 }
@@ -570,13 +569,12 @@ macro_rules! require_eq {
 macro_rules! require_neq {
     ($value1: expr, $value2: expr, $error_code: expr $(,)?) => {
         if $value1 == $value2 {
-            return Err(error!($error_code).with_values(($value1, $value2)));
+	    panic!();
         }
     };
     ($value1: expr, $value2: expr $(,)?) => {
         if $value1 == $value2 {
-            return Err(error!(anchor_lang::error::ErrorCode::RequireNeqViolated)
-                .with_values(($value1, $value2)));
+	    panic!();
         }
     };
 }
@@ -600,13 +598,12 @@ macro_rules! require_neq {
 macro_rules! require_keys_eq {
     ($value1: expr, $value2: expr, $error_code:expr $(,)?) => {
         if $value1 != $value2 {
-            return Err(error!($error_code).with_pubkeys(($value1, $value2)));
+	    panic!();
         }
     };
     ($value1: expr, $value2: expr $(,)?) => {
         if $value1 != $value2 {
-            return Err(error!(anchor_lang::error::ErrorCode::RequireKeysEqViolated)
-                .with_pubkeys(($value1, $value2)));
+	    panic!();
         }
     };
 }
@@ -630,15 +627,12 @@ macro_rules! require_keys_eq {
 macro_rules! require_keys_neq {
     ($value1: expr, $value2: expr, $error_code: expr $(,)?) => {
         if $value1 == $value2 {
-            return Err(error!($error_code).with_pubkeys(($value1, $value2)));
+	    panic!();
         }
     };
     ($value1: expr, $value2: expr $(,)?) => {
         if $value1 == $value2 {
-            return Err(
-                error!(anchor_lang::error::ErrorCode::RequireKeysNeqViolated)
-                    .with_pubkeys(($value1, $value2)),
-            );
+	    panic!();
         }
     };
 }
@@ -662,13 +656,12 @@ macro_rules! require_keys_neq {
 macro_rules! require_gt {
     ($value1: expr, $value2: expr, $error_code: expr $(,)?) => {
         if $value1 <= $value2 {
-            return Err(error!($error_code).with_values(($value1, $value2)));
+	    panic!();
         }
     };
     ($value1: expr, $value2: expr $(,)?) => {
         if $value1 <= $value2 {
-            return Err(error!(anchor_lang::error::ErrorCode::RequireGtViolated)
-                .with_values(($value1, $value2)));
+	    panic!();
         }
     };
 }
@@ -690,13 +683,12 @@ macro_rules! require_gt {
 macro_rules! require_gte {
     ($value1: expr, $value2: expr, $error_code: expr $(,)?) => {
         if $value1 < $value2 {
-            return Err(error!($error_code).with_values(($value1, $value2)));
+	    panic!();
         }
     };
     ($value1: expr, $value2: expr $(,)?) => {
         if $value1 < $value2 {
-            return Err(error!(anchor_lang::error::ErrorCode::RequireGteViolated)
-                .with_values(($value1, $value2)));
+	    panic!();
         }
     };
 }
