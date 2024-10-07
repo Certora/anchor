@@ -313,13 +313,13 @@ impl From<ProgramErrorWithOrigin> for Error {
 
 impl From<TryFromIntError> for Error {
     fn from(e: TryFromIntError) -> Self {
-        Self::AnchorError(Box::new(AnchorError {
+        Self::AnchorError(AnchorError {
             error_name: ErrorCode::InvalidNumericConversion.name(),
             error_code_number: ErrorCode::InvalidNumericConversion.into(),
             error_msg: format!("{}", e),
             error_origin: None,
             compared_values: None,
-        }))
+        })
     }
 }
 
