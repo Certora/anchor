@@ -85,7 +85,9 @@ pub fn error_code(
 pub fn error(ts: proc_macro::TokenStream) -> TokenStream {
     let input = parse_macro_input!(ts as ErrorInput);
     let error_code = input.error_code;
-    create_error(error_code, true, None)
+    // CERTORA
+    create_error(error_code, false, None)
+    // create_error(error_code, true, None)
 }
 
 fn create_error(error_code: Expr, source: bool, account_name: Option<Expr>) -> TokenStream {
