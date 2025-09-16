@@ -99,9 +99,10 @@ pub fn event(
 /// }
 /// ```
 #[proc_macro]
-pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+pub fn emit(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
     // For verification this is a non-op
-    input
+    let no_op = quote! { () }; // original macro expands to a block with type unit
+    proc_macro::TokenStream::from(no_op)
 }
 /*pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let data: proc_macro2::TokenStream = input.into();
