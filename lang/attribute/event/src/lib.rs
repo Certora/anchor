@@ -101,7 +101,7 @@ pub fn event(
 #[proc_macro]
 pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     // CERTORA: For verification this is a non-op
-    proc_macro::TokenStream::new()
+    "()".parse().unwrap()	
 }
 
 /*
