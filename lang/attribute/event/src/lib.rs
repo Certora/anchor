@@ -100,10 +100,13 @@ pub fn event(
 /// ```
 #[proc_macro]
 pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    // For verification this is a non-op
-    input
+    // CERTORA: For verification this is a non-op
+    proc_macro::TokenStream::new()
 }
-/*pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+
+/*
+// CERTORA: replaced by noop
+pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let data: proc_macro2::TokenStream = input.into();
     proc_macro::TokenStream::from(quote! {
         {
