@@ -169,6 +169,7 @@ impl<'info, T: ZeroCopy + Owner> AccountLoader<'info, T> {
     }
 
     /// Returns a `RefMut` to the account data structure for reading or writing.
+    #[inline(always)]
     pub fn load_mut(&self) -> Result<RefMut<T>> {
         // AccountInfo api allows you to borrow mut even if the account isn't
         // writable, so add this check for a better dev experience.
