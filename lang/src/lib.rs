@@ -487,12 +487,12 @@ pub mod __private {
 macro_rules! require {
     ($invariant:expr, $error:tt $(,)?) => {
         if !($invariant) {
-            return Err(anchor_lang::error!($crate::ErrorCode::$error));
+            panic!();
         }
     };
     ($invariant:expr, $error:expr $(,)?) => {
         if !($invariant) {
-            return Err(anchor_lang::error!($error));
+            panic!();
         }
     };
 }
