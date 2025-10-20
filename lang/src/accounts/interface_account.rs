@@ -182,6 +182,12 @@ impl<'a, T: AccountSerialize + AccountDeserialize + Clone> InterfaceAccount<'a, 
         }
     }
 
+    /// CERTORA: used to create a new instance for verification purposes
+    pub fn new_unchecked(account: Account<'a, T>) -> Self {
+        let owner = account.info.owner.clone();
+        Self { account, owner }
+    }
+
     /// Reloads the account from storage. This is useful, for example, when
     /// observing side effects after CPI.
     pub fn reload(&mut self) -> Result<()> {
