@@ -24,6 +24,13 @@ impl anchor_lang::AccountDeserialize for TokenAccount {
     }
 }
 
+impl TokenAccount {
+    /// CERTORA: used to create a new instance for verification purposes
+    pub fn new_unchecked(inner: spl_token_2022::state::Account) -> Self {
+        Self(inner)
+    }
+}
+
 impl anchor_lang::AccountSerialize for TokenAccount {}
 
 impl anchor_lang::Owners for TokenAccount {
