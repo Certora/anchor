@@ -93,6 +93,7 @@ pub fn derive_event(_item: proc_macro::TokenStream) -> proc_macro::TokenStream {
 ///     pub label: [u8; 5],
 /// }
 /// ```
+#[cfg(not(feature = "certora"))]
 #[proc_macro]
 pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let data: proc_macro2::TokenStream = input.into();
@@ -101,6 +102,13 @@ pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
             anchor_lang::solana_program::log::sol_log_data(&[&anchor_lang::Event::data(&#data)]);
         }
     })
+}
+
+#[cfg(feature = "certora")]
+#[proc_macro]
+pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    // CERTORA: For verification this is a non-op
+    "()".parse().unwrap()	
 }
 
 /// Log an event by making a self-CPI that can be subscribed to by clients.

@@ -75,3 +75,19 @@ impl anchor_lang::Ids for TokenInterface {
 }
 
 pub use crate::token_2022::*;
+
+#[cfg(feature = "certora")]
+impl TokenAccount {
+    /// CERTORA: used to create a new instance for verification purposes
+    pub fn new_unchecked(inner: spl_token_2022::state::Account) -> Self {
+        Self(inner)
+    }
+}
+
+#[cfg(feature = "certora")]
+impl Mint {
+    /// CERTORA: used to create a new instance for verification purposes
+    pub fn new_unchecked(inner: spl_token_2022::state::Mint) -> Self {
+        Self(inner)
+    }
+}

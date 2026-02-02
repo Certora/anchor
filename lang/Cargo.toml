@@ -32,6 +32,10 @@ idl-build = [
     "anchor-syn/idl-build",
 ]
 init-if-needed = ["anchor-derive-accounts/init-if-needed"]
+certora = [
+    "anchor-attribute-event/certora",
+    "anchor-attribute-error/certora",
+]
 
 [dependencies]
 anchor-attribute-access-control = { path = "./attribute/access-control", version = "0.28.0" }

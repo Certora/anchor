@@ -21,6 +21,7 @@ shmem = []
 stake = ["borsh"]
 token = ["spl-token"]
 token_2022 = ["spl-token-2022"]
+certora = []
 
 [dependencies]
 anchor-lang = { path = "../lang", version = "0.28.0", features = ["derive"] }
