@@ -182,6 +182,13 @@ impl<'a, T: AccountSerialize + AccountDeserialize + Clone> InterfaceAccount<'a, 
         }
     }
 
+    /// CERTORA: used for mocking purposes
+    #[cfg(feature = "certora")]
+    pub fn new_unchecked(account: Account<'a, T>) -> Self {
+        let owner = *account.info.owner;
+        Self { account, owner }
+    }
+
     /// Reloads the account from storage. This is useful, for example, when
     /// observing side effects after CPI.
     pub fn reload(&mut self) -> Result<()> {

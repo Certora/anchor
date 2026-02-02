@@ -97,3 +97,19 @@ pub fn get_mint_extension_data<T: Extension + Pod>(
     let extension_data = *mint_with_extension.get_extension::<T>()?;
     Ok(extension_data)
 }
+
+#[cfg(feature = "certora")]
+impl TokenAccount {
+    /// CERTORA: used to create a new instance for verification purposes
+    pub fn new_unchecked(inner: spl_token_2022::state::Account) -> Self {
+        Self(inner)
+    }
+}
+
+#[cfg(feature = "certora")]
+impl Mint {
+    /// CERTORA: used to create a new instance for verification purposes
+    pub fn new_unchecked(inner: spl_token_2022::state::Mint) -> Self {
+        Self(inner)
+    }
+}
