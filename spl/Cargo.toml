@@ -29,6 +29,7 @@ token_2022_extensions = [
     "spl-token-metadata-interface",
     "spl-pod",
 ]
+certora = []
 
 [dependencies]
 anchor-lang = { path = "../lang", version = "0.32.0", features = ["derive"] }
