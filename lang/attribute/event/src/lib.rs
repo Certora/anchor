@@ -111,7 +111,7 @@ pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
 #[cfg(feature = "certora")]
 #[proc_macro]
-pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+pub fn emit(_input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     // CERTORA: For verification this is a non-op
     "()".parse().unwrap()	
 }
