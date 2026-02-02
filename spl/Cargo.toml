@@ -24,6 +24,7 @@ stake = ["borsh"]
 token = ["spl-token"]
 token_2022 = ["spl-token-2022"]
 token_2022_extensions = ["spl-token-2022", "spl-token-group-interface", "spl-token-metadata-interface", "spl-pod"]
+certora = []
 
 [dependencies]
 anchor-lang = { path = "../lang", version = "0.31.1", features = ["derive"] }

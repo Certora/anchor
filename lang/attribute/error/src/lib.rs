@@ -81,11 +81,20 @@ pub fn error_code(
 ///     Hello,
 /// }
 /// ```
+#[cfg(not(feature = "certora"))]
 #[proc_macro]
 pub fn error(ts: proc_macro::TokenStream) -> TokenStream {
     let input = parse_macro_input!(ts as ErrorInput);
     let error_code = input.error_code;
     create_error(error_code, true, None)
+}
+
+#[cfg(feature = "certora")]
+#[proc_macro]
+pub fn error(ts: proc_macro::TokenStream) -> TokenStream {
+    let input = parse_macro_input!(ts as ErrorInput);
+    let error_code = input.error_code;
+    create_error(error_code, false /* true */, None)
 }
 
 fn create_error(error_code: Expr, source: bool, account_name: Option<Expr>) -> TokenStream {
