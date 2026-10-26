@@ -97,8 +97,9 @@ use {
 ///
 #[derive(Clone)]
 pub struct Program<'info, T = ()> {
-    info: &'info AccountInfo<'info>,
-    _phantom: PhantomData<T>,
+    // CERTORA: public so that a verification harness can construct a Program directly.
+    pub info: &'info AccountInfo<'info>,
+    pub _phantom: PhantomData<T>,
 }
 
 impl<T: fmt::Debug> fmt::Debug for Program<'_, T> {
