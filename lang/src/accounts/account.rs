@@ -228,8 +228,10 @@ use {
 /// to access mint accounts.
 #[derive(Clone)]
 pub struct Account<'info, T: AccountSerialize + AccountDeserialize + Clone> {
-    account: T,
-    info: &'info AccountInfo<'info>,
+    // CERTORA: public so that a verification harness can construct an Account without
+    // deserializing it.
+    pub account: T,
+    pub info: &'info AccountInfo<'info>,
 }
 
 impl<T: AccountSerialize + AccountDeserialize + Clone + fmt::Debug> fmt::Debug for Account<'_, T> {
