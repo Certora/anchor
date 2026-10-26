@@ -224,8 +224,10 @@ use std::ops::{Deref, DerefMut};
 /// to access mint accounts.
 #[derive(Clone)]
 pub struct Account<'info, T: AccountSerialize + AccountDeserialize + Clone> {
-    account: T,
-    info: &'info AccountInfo<'info>,
+    // CVT: these two field made public so that we can create Account without calling
+    // deserialization.
+    pub account: T,
+    pub info: &'info AccountInfo<'info>,
 }
 
 impl<'info, T: AccountSerialize + AccountDeserialize + Clone + fmt::Debug> fmt::Debug

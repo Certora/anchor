@@ -158,10 +158,10 @@ use std::ops::{Deref, DerefMut};
 /// to access mint accounts.
 #[derive(Clone)]
 pub struct InterfaceAccount<'info, T: AccountSerialize + AccountDeserialize + Clone> {
-    account: Account<'info, T>,
+    pub account: Account<'info, T>,
     // The owner here is used to make sure that changes aren't incorrectly propagated
     // to an account with a modified owner
-    owner: Pubkey,
+    pub owner: Pubkey,
 }
 
 impl<'info, T: AccountSerialize + AccountDeserialize + Clone + fmt::Debug> fmt::Debug
