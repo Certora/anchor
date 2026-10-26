@@ -100,13 +100,20 @@ pub fn event(
 /// ```
 #[proc_macro]
 pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    // CERTORA: For verification this is a non-op
+    "()".parse().unwrap()	
+}
+
+/*
+// CERTORA: replaced by noop
+pub fn emit(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let data: proc_macro2::TokenStream = input.into();
     proc_macro::TokenStream::from(quote! {
         {
             anchor_lang::solana_program::log::sol_log_data(&[&anchor_lang::Event::data(&#data)]);
         }
     })
-}
+}*/
 
 /// Log an event by making a self-CPI that can be subscribed to by clients.
 ///
